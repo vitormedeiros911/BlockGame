@@ -19,53 +19,37 @@
 <body>
   <script>
 
-    //anteriormente temos o inicio do documento HTML, sua tag de cabeçalho, sua tag e sua tag de titulo, e dentro da tag <style>
-    //temos a centralização do elemento canvas, que irá ser mostrado, e o inicio do corpo da página e do JavaScript
-
-
-    //aqui temos as variáveis globais
+    //variáveis globais
     var canvas, ctx, Altura, Largura, frame = 0, maxpulos = 4, velocidade = 6, estadoAtual, record,
 
-      // define os estados do jogador ainda nas variaveis
+      // define os estados do jogador
       estados = {
         jogar: 0,
         jogando: 1,
         perdeu: 2
       },
 
-      //aqui define as caracteristicas do chão dentro dessa variavel
+      //define as caracteristicas do chão dentro dessa variavel
       chao = {
-
-        //define ele a 550 pixels de distância do eixo y
-        //obs* o eixo x é na vertical e o eixo y é na horizontal
+        //define a 550 pixels de distância do eixo y
         y: 550,
-
-        //especifica a altura em 50 pixels
         altura: 50,
-
-        //especifica a cor do chão
+        //cor do chão
         cor: "#00FF00",
 
-        //cria uma função para estar desenhando o chão
+        //cria uma função para desenhar o chão
         desenhar: function () {
-
           //pega a variavel ctx como contexto para prencher com a cor definida anteriormente para o chão
           ctx.fillStyle = this.cor;
-
-          //especifica aonde deve ser aplicada a variavel chão, ou seja, no ponto 0 do eixo x, no eixo y especificado anteriormente
-          //na largura a ser determinada, e na altura já estabelecida dentro da variavel
+          //especifica aonde deve ser aplicada a variavel chão, ou seja, no ponto 0 do eixo x, no eixo y especificado
           ctx.fillRect(0, this.y, Largura, this.altura);
-
         }
-        //finaliza a variavel chão e função para desenhar o chão 
       },
 
-      //define as caracteristicas do bloco, como variavel
+      //define as caracteristicas do bloco
       bloco = {
-
         //define o bloco, a 50 pixels de distância do eixo x do quadro
         x: 50,
-
         //inicia o bloco sempre no ponto 0 do eixo y
         y: 0,
 
@@ -91,12 +75,9 @@
         //define uma pontuação inicial
         score: 0,
 
-        // define uma função "pular"
         pula: function () {
-
           // se quantidade de pulos for menor que o máximo de pulos ocorrerá o seguinte
           if (this.qntPulos < maxpulos) {
-
             //a velocidade estabelecida será igual a menos a força do pulo
             this.velocidade = - this.forcaDoPulo;
             this.qntPulos++;
@@ -106,22 +87,18 @@
 
         //define uma função para reiniciar o jogo
         reset: function () {
-
           // a velocidade estabelecida dentro da variavel bloco, mudará para esta quando a função reset for chamada
           this.velocidade = 0;
-
           //assim como a velocidade o eixo y tambem mudará
           this.y = 0;
-
           //Se o score, que é a pontuação estabelecida nessa variavel for maior que o record, ela será aplicada ao record, como um novo record
           //e será enviada para o Armazenamento local, mas somente se o score for maior que o record já estabelecido
           if (this.score > record) {
             localStorage.setItem("record", this.score);
             record = this.score;
           }
-          //assim feito, a pontuação será mudada para 0, para que tenha uma nova a ser aplicada
+          //a pontuação será mudada para 0, para que tenha uma nova a ser aplicada
           this.score = 0;
-
           //fim da função reset
         },
 
@@ -167,12 +144,8 @@
       //Uma nova variavel é feita para criar os obstaculos
       obstaculos = {
 
-        //um vetor é criado dentro da variavel obstaculos
-        //um vetor é uma variavel que armazena determinados valores
         _obs: [],
 
-        //por exemplo, esse vetor armazena 5 indices, um vetor conta os indices a partir do 0,
-        //o primeiro indice sempre será o 0, o segundo o será o indice 1 e assim por diante
         cores: ["#8A2BE2", "#53868B", "#00008B", "#330033", "#8F8FBD"],
 
         //variavel criada dentro de obstaculos, com o objetivo de inserir o tempo, por enquanto iniciada em 0
@@ -235,7 +208,6 @@
             else if (obs.x == 0)
               bloco.score++;
 
-
             //se a largura dos obstaculos for menor ou igual a menos sua largura, será removido 
             //ou seja, se sair da tela será removido
             else if (obs.x <= -obs.largura) {
@@ -245,7 +217,6 @@
 
             }
           }
-
           //finaliza a função atualizar
         },
 
@@ -273,14 +244,11 @@
         //final da especificação da variavel obstaculos e das outras
       };
 
-    // conta a quantidade de clicks e faz o personagem pular caso esteja jogando,
+    // conta a quantidade de clicks e faz o bloco pular caso esteja jogando,
     function clique(event) {
-      //se o estado atual for igual a variavel estados e estiver no atributo jogando fará o seguinte comando
       if (estadoAtual == estados.jogando)
-        //puxa a função pular dentro da variavel bloco
         bloco.pula();
 
-      //se estado atual for jogar, mudará o estado atual para jogando, iniciando o jogo
       else if (estadoAtual == estados.jogar) {
         estadoAtual = estados.jogando;
 
@@ -290,10 +258,7 @@
       else if (estadoAtual == estados.perdeu && bloco.y >= 2 * Altura) {
         estadoAtual = estados.jogar;
 
-        // chama a função limpar dentro da variavel obstáculo
         obstaculos.limpa();
-
-        // chama a função reset dentro da variavel bloco
         bloco.reset();
       }
       //os estados só mudarão caso o jogador clique
@@ -301,10 +266,8 @@
 
     // função principal onde será chamada as outras funções (o construtor)
     function principal() {
-
       // pega a largura total da tela
       Largura = window.innerHeight;
-
       // pega a altura total da tela
       Altura = window.innerWidth;
 
@@ -315,91 +278,57 @@
         Altura = 600;
       }
 
-      // criação de um novo elemento do tipo canvas, é como se eu escrevesse a tag canvas no html
-      //o canvas é um elemento novo em HTML5, que permite que se desenhem elementos gráficos usando JavaScript.
       canvas = document.createElement("canvas");
 
-      //define a largura do canvas
       canvas.width = Largura;
-
-      //define a altura do canvas
       canvas.height = Altura;
 
-      //define uma borda preta na canvas
       canvas.style.border = "3px solid #000";
 
-      // pegar o contexto 2D para o canvas, isso quer dizer que tudo quer for renderizado será do contexto 2D
       ctx = canvas.getContext("2d");
 
       // adiciona o canvas ao nosso documento HTML
       document.body.appendChild(canvas);
 
-      // adiciona o evento de clique, toda vez que alguém cliar na pagina será executado a função "clique" que criamos anteriormente, o evento será pasado por parametro
       document.addEventListener("mousedown", clique);
 
       // inicia o jogo com o estado de jogar
       estadoAtual = estados.jogar;
-
       //pega a veriavel record, de dentro do armazenamento local
       record = localStorage.getItem("record");
 
-      //se não houver record já estabelecido, ele será igual a 0
       if (record == null)
         record = 0;
 
       //chama a função roda
       roda();
-
       //finaliza a função principal
     }
 
     //cria uma função para estar sempre repetindo os seguintes comandos:
     function roda() {
-
-      //chamar a função atualizar,
       atualizar();
-
-      //chamar a função desenha
       desenhar();
 
-      //E a cada segundo a função roda sera chamada, repetidamente
       window.requestAnimationFrame(roda);
     }
 
-    //cria uma função indepedente para estar atualizando o jogo
     function atualizar() {
-
-      //incrementa mais 1 ao nosso frame
       frame++;
-
-      //chama a função de atualizar dentro da variavel bloco
       bloco.atualizar();
 
-      //aqui, se o estado atual do jogador for jogando, irá chamar a função atualizar dentro da variavel obstaculos
       if (estadoAtual == estados.jogando)
         obstaculos.atualizar();
     }
 
 
     function desenhar() {
-
-      // define a cor do retangulo que queremos desenhar
       ctx.fillStyle = "#50BEff";
-
-      // desenha um retangulo da x = 0 até o tamanho total da largura
-      //e de y =  0 até o tamanho total da altura
       ctx.fillRect(0, 0, Largura, Altura);
-
-      //vai preencher com a cor determinada
       ctx.fillStyle = "#fff";
-
-      //define o estilo e tamanha da fonte a ser desenhada
       ctx.font = "50px Arial";
-
-      //determina aonde deve ser mostrada a pontuação, no eixo x e y
       ctx.fillText(bloco.score, 30, 68);
 
-      //se o estado atual for igual a jogar será feito os seguintes comandos
       if (estadoAtual == estados.jogar) {
 
         //preenche uma área de com a cor verde, no centro
@@ -409,7 +338,6 @@
 
       //se for igual a perdeu:
       else if (estadoAtual == estados.perdeu) {
-
         //será preenchida uma área com a cor vermelha no centro
         ctx.fillStyle = "red";
         ctx.fillRect(Largura / 2 - 50, Altura / 2 - 50, 100, 100);
@@ -421,7 +349,7 @@
         ctx.translate(Largura / 2, Altura / 2);
         ctx.fillStyle = "#fff";
 
-        //aqui é defenido o tamanho do que irá ocupar a pontuação e as palavras
+        //defenido o tamanho do que irá ocupar a pontuação e as palavras
         if (bloco.score > record)
           ctx.fillText("Novo Record! ", -150, -65);
 
@@ -448,10 +376,8 @@
 
       }
 
-      //se o estado atual for o estado de jogando:
       else if (estadoAtual == estados.jogando)
 
-        //será chamado a função desenhar dentro da variavel , chão e bloco
         obstaculos.desenhar();
       chao.desenhar();
       bloco.desenhar();
@@ -460,5 +386,4 @@
     principal();
   </script>
 </body>
-
 </html>
